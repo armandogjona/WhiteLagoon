@@ -4,14 +4,10 @@ using WhiteLagoon.Infrastructure.Data;
 
 namespace WhiteLagoon.Web.Controllers
 {
-    public class VillaController : Controller
+    public class VillaController(ApplicationDbContext db) : Controller
     {
-        private readonly ApplicationDbContext _db;
+        private readonly ApplicationDbContext _db = db;
 
-        public VillaController(ApplicationDbContext db)
-        {
-            _db = db;
-        }
         // _db retrieves all the Villa
         public IActionResult Index()
         {
@@ -25,9 +21,14 @@ namespace WhiteLagoon.Web.Controllers
         [HttpPost] //sends data to a server to create or update a resource
         public IActionResult Create(Villa obj)
         {
-            _db.Villas.Add(obj);
-            _db.SaveChanges();
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                _db.Villas.Add(obj);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(obj);
         }
     }
 }
+
