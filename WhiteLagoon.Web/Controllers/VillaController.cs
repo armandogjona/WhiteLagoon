@@ -23,7 +23,7 @@ namespace WhiteLagoon.Web.Controllers
         {
             if(obj.Name==obj.Description)
             {
-                ModelState.AddModelError("name","The description cannot exactly match the Name.");
+                ModelState.AddModelError("description","The description cannot exactly match the Name.");
             }
             if (ModelState.IsValid)
             {
@@ -53,9 +53,11 @@ namespace WhiteLagoon.Web.Controllers
 			{
 				_db.Villas.Update(obj);
 				_db.SaveChanges();
-				return RedirectToAction("Index");
+				TempData["success"] = "The villa has been updated successfully."; //notification
+                return RedirectToAction("Index");
 			}
-			return View(obj);
+            TempData["error"] = "The villa could not be updated.";
+            return View(obj);
 		}
 
 		public IActionResult Delete(int villaId)
@@ -70,7 +72,7 @@ namespace WhiteLagoon.Web.Controllers
 			return View(obj);
 		}
 
-		[HttpPost]
+		[HttpPost] // endpoint for deleting a resource
 		public IActionResult Delete(Villa obj)
 		{
 			Villa? objFromDb = _db.Villas.FirstOrDefault(u => u.Id == obj.Id);
@@ -78,9 +80,12 @@ namespace WhiteLagoon.Web.Controllers
 			{
 				_db.Villas.Remove(objFromDb);
 				_db.SaveChanges();
-				return RedirectToAction("Index");
+				TempData["success"] = "The villa has been deleted successfully.";
+
+                return RedirectToAction("Index");
 			}
-			return View(obj);
+			TempData["error"] = "The villa could not be deleted.";
+            return View(obj);
 		}
 
 	}
