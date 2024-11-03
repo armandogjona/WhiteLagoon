@@ -23,7 +23,7 @@ namespace WhiteLagoon.Web.Controllers
         {
             if(obj.Name==obj.Description)
             {
-                ModelState.AddModelError("","The description cannot exactly match the Name.");
+                ModelState.AddModelError("name","The description cannot exactly match the Name.");
             }
             if (ModelState.IsValid)
             {
@@ -33,6 +33,56 @@ namespace WhiteLagoon.Web.Controllers
             }
             return View(obj);
         }
-    }
+        
+        public IActionResult Update(int villaId)
+        {
+			
+			Villa? obj = _db.Villas.FirstOrDefault(u => u.Id == villaId);
+			
+			if (obj == null)
+            { 
+                return RedirectToAction("Error","Home"); 
+            }
+			return View(obj);
+		}
+
+		[HttpPost]
+		public IActionResult Update(Villa obj)
+		{
+			if (ModelState.IsValid && obj.Id>0)
+			{
+				_db.Villas.Update(obj);
+				_db.SaveChanges();
+				return RedirectToAction("Index");
+			}
+			return View(obj);
+		}
+
+		public IActionResult Delete(int villaId)
+		{
+
+			Villa? obj = _db.Villas.FirstOrDefault(u => u.Id == villaId);
+
+			if (obj is null)
+			{
+				return RedirectToAction("Error", "Home");
+			}
+			return View(obj);
+		}
+
+		[HttpPost]
+		public IActionResult Delete(Villa obj)
+		{
+			Villa? objFromDb = _db.Villas.FirstOrDefault(u => u.Id == obj.Id);
+			if (objFromDb is not null)
+			{
+				_db.Villas.Remove(objFromDb);
+				_db.SaveChanges();
+				return RedirectToAction("Index");
+			}
+			return View(obj);
+		}
+
+	}
 }
 
