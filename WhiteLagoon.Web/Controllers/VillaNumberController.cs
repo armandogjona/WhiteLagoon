@@ -7,9 +7,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WhiteLagoon.Web.Controllers
 {
-    public class VillaNumberController(ApplicationDbContext db) : Controller
+    public class VillaNumberController : Controller
     {
-        private readonly ApplicationDbContext _db = db;
+        private readonly ApplicationDbContext _db;
+
+		public VillaNumberController(ApplicationDbContext db)
+		{
+			_db = db;
+		}
 
         // _db retrieves all the Villa
         public IActionResult Index()

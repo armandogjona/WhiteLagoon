@@ -6,7 +6,7 @@ namespace WhiteLagoon.Application.Common.Interfaces
     public interface IVillaRepository
     {
         IEnumerable<Villa> GetAllVillas(Expression<Func<Villa,bool>>? filter = null ,string? includeProperties = null);
-        IEnumerable<Villa> Get(Expression<Func<Villa,bool>>? filter , string? includeProperties = null);
+        IEnumerable<Villa> Get(Expression<Func<Villa,bool>> filter , string? includeProperties = null);
         void Add(Villa entity);
         void Update(Villa entity);
         void Remove(Villa entity);
