@@ -39,7 +39,7 @@ namespace WhiteLagoon.Infrastructure.Repository
             return query.FirstOrDefault();
         }
 
-        public IEnumerable<Villa> GetAllVillas(Expression<Func<Villa, bool>>? filter = null, string? includeProperties = null)
+        public IEnumerable<Villa> GetAll(Expression<Func<Villa, bool>>? filter = null, string? includeProperties = null)
         {
             IQueryable<Villa> query = _db.Set<Villa>();
             if (filter != null)
