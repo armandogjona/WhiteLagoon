@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using WhiteLagoon.Application.Common.Interfaces;
 using WhiteLagoon.Domain.Entities;
 using WhiteLagoon.Infrastructure.Data;
@@ -19,15 +20,43 @@ namespace WhiteLagoon.Infrastructure.Repository
             _db.Add(entity);
         }
 
-        public IEnumerable<Villa> Get(Expression<Func<Villa, bool>>? filter, string? includeProperties = null)
+        public Villa Get(Expression<Func<Villa, bool>>? filter, string? includeProperties = null)
         {
-            throw new NotImplementedException();
+            IQueryable<Villa> query = _db.Set<Villa>();
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+            if (!string.IsNullOrEmpty(includeProperties))
+            {
+                //Villa, VillaNumber -- case sensitive
+                foreach (var includeProp in includeProperties
+                    .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+            }
+            return query.FirstOrDefault();
         }
 
         public IEnumerable<Villa> GetAllVillas(Expression<Func<Villa, bool>>? filter = null, string? includeProperties = null)
         {
-            throw new NotImplementedException();
-        }
+            IQueryable<Villa> query = _db.Set<Villa>();
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+            if (!string.IsNullOrEmpty(includeProperties))
+            {
+                //Villa, VillaNumber -- case sensitive
+                foreach (var includeProp in includeProperties
+                    .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+            } 
+            return query.ToList();
+        } //Include all properties that are seperated by a comma
 
         public void Remove(Villa entity)
         {
