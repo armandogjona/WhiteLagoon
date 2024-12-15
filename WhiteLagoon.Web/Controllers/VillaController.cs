@@ -100,6 +100,7 @@ namespace WhiteLagoon.Web.Controllers
         }
 
 
+
         public IActionResult Delete(int villaId)
         {
             Villa? obj = _unitOfWork.Villa.Get(u => u.Id == villaId);
