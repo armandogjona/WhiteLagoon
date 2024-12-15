@@ -10,6 +10,7 @@ namespace WhiteLagoon.Infrastructure.Data
         }
         public DbSet<Villa> Villas { get; set; } //add reference to Villa and create table in Db
         public DbSet<VillaNumber> VillaNumbers { get; set; }
+        public DbSet<Amenity> Amenities { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -50,34 +51,34 @@ namespace WhiteLagoon.Infrastructure.Data
             modelBuilder.Entity<VillaNumber>().HasData(
                 new VillaNumber
                 {
-                    Villa_Number=101,
-                    VillaId=1,
-
-                }, 
-                new VillaNumber
-                {
-                    Villa_Number=102,
-                    VillaId=1,
-
-                }, 
-                new VillaNumber
-                {
-                    Villa_Number=103,
-                    VillaId=1,
+                    Villa_Number = 101,
+                    VillaId = 1,
 
                 },
                 new VillaNumber
                 {
-                    Villa_Number=104,
-                    VillaId=1,
+                    Villa_Number = 102,
+                    VillaId = 1,
 
                 },
-                 new VillaNumber
-                 {
-                     Villa_Number = 201,
-                     VillaId = 2,
+                new VillaNumber
+                {
+                    Villa_Number = 103,
+                    VillaId = 1,
 
-                 },
+                },
+                new VillaNumber
+                {
+                    Villa_Number = 104,
+                    VillaId = 1,
+
+                },
+                new VillaNumber
+                {
+                    Villa_Number = 201,
+                    VillaId = 2,
+
+                },
                 new VillaNumber
                 {
                     Villa_Number = 202,
@@ -90,12 +91,12 @@ namespace WhiteLagoon.Infrastructure.Data
                     VillaId = 2,
 
                 },
-                 new VillaNumber
-                 {
-                     Villa_Number = 301,
-                     VillaId = 3,
+                new VillaNumber
+                {
+                    Villa_Number = 301,
+                    VillaId = 3,
 
-                 },
+                },
                 new VillaNumber
                 {
                     Villa_Number = 302,
@@ -103,6 +104,70 @@ namespace WhiteLagoon.Infrastructure.Data
 
                 }
                 );
+            modelBuilder.Entity<Amenity>().HasData(
+                new Amenity
+                {
+                    Id = 1,
+                    VillaId = 1,
+                    Name = "Private Pool"
+                },
+                new Amenity
+                {
+                    Id = 2,
+                    VillaId = 1,
+                    Name = "Private Garden"
+                },
+                new Amenity
+                {
+                    Id = 3,
+                    VillaId = 1,
+                    Name = "Private Balcony"
+                },
+                new Amenity
+                {
+                    Id = 4,
+                    VillaId = 2,
+                    Name = "1 King bed and 1 Sofa bed"
+                },
+                new Amenity
+                {
+                    Id = 5,
+                    VillaId = 2,
+                    Name = "Jaccuzi"
+                },
+                new Amenity
+                {
+                    Id = 6,
+                    VillaId = 3,
+                    Name = "Game Room"
+                },
+                new Amenity
+                {
+                    Id = 7,
+                    VillaId = 3,
+                    Name = "Tennis Court"
+                },
+                new Amenity
+                {
+                    Id = 8,
+                    VillaId = 3,
+                    Name = "Gym"
+                },
+                new Amenity
+                {
+                    Id = 9,
+                    VillaId = 1,
+                    Name = "BBQ Grill"
+                },
+                new Amenity
+                {
+                    Id = 10,
+                    VillaId = 2,
+                    Name = "Home Theater System"
+                }
+            );
         }
     }
 }
+        
+        
