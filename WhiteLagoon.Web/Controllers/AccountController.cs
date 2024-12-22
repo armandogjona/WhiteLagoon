@@ -37,6 +37,36 @@ namespace WhiteLagoon.Web.Controllers
 
             return View(loginVM);
         }
+
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
+        public IActionResult Register()
+        {
+            if(!_roleManager.RoleExistsAsync(SD.Role_Admin).GetAwaiter().GetResult())
+            {
+                _roleManager.CreateAsync(new IdentityRole(SD.Role_Admin)).Wait();
+                _roleManager.CreateAsync(new IdentityRole(SD.Role_Customer)).Wait();
+            }
+            RegisterVM registerVM = new()
+            {
+                RoleList = _roleManager.Roles.Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Name
+                })
+            };
+            return View(registerVM);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Register(RegisterVM registerVM)
         {
@@ -51,23 +81,23 @@ namespace WhiteLagoon.Web.Controllers
                 CreatedAt = DateTime.Now
             };
 
-            var result = await _userManager.CreateAsync(user, registerVM.Password); //create a user
+            var result = await _userManager.CreateAsync(user, registerVM.Password);
 
-            if (result.Succeeded)
+            if(result.Succeeded)
             {
-                if (!string.IsNullOrEmpty(registerVM.Role))
+                if(!string.IsNullOrEmpty(registerVM.Role))
                 {
-                    await _userManager.AddToRoleAsync(user, registerVM.Role); //add user to role
+                    await _userManager.AddToRoleAsync(user, registerVM.Role);
                 }
                 else
                 {
                     await _userManager.AddToRoleAsync(user, SD.Role_Customer);
                 }
 
-                await _signInManager.SignInAsync(user, isPersistent: false); //sign in the user
+                await _signInManager.SignInAsync(user, isPersistent: false);
                 if (string.IsNullOrEmpty(registerVM.RedirectUrl))
                 {
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index","Home");
                 }
                 else
                 {
@@ -77,7 +107,7 @@ namespace WhiteLagoon.Web.Controllers
 
             foreach (var error in result.Errors)
             {
-                ModelState.AddModelError("", error.Description); //add error to model state
+                ModelState.AddModelError("", error.Description);
             }
 
             registerVM.RoleList = _roleManager.Roles.Select(x => new SelectListItem
@@ -85,7 +115,6 @@ namespace WhiteLagoon.Web.Controllers
                 Text = x.Name,
                 Value = x.Name
             });
-                
             return View(registerVM);
         }
 
