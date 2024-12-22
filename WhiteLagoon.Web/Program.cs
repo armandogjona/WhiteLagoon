@@ -22,6 +22,11 @@ builder.Services.ConfigureApplicationCookie(option =>
    option.LoginPath = "/Account/Login";
 });
 
+builder.Services.Configure<IdentityOptions>(option =>
+{
+    option.Password.RequiredLength = 7;     
+}); /*configure password requirements*/
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 var app = builder.Build();
 
