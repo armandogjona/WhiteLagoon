@@ -23,7 +23,7 @@ namespace WhiteLagoon.Infrastructure.Repository
             _db.Bookings.Update(entity); 
         }
 
-        public void UpdateaStripePaymentID(int bookingId, string sessionId, string paymentIntentId)
+        public void UpdateStripePaymentID(int bookingId, string sessionId, string paymentIntentId)
         {
             var bookingFromDb = _db.Bookings.FirstOrDefault(m => m.Id == bookingId);
             if (bookingFromDb != null)

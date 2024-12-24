@@ -79,7 +79,7 @@ namespace WhiteLagoon.Web.Controllers
             var service = new SessionService();
             Session session = service.Create(options);
 
-            _unitOfWork.Booking.UpdateaStripePaymentID(booking.Id, session.Id, session.PaymentIntentId);
+            _unitOfWork.Booking.UpdateStripePaymentID(booking.Id, session.Id, session.PaymentIntentId);
             _unitOfWork.Save();
             Response.Headers.Add("Location", session.Url);
             return new StatusCodeResult(303);
@@ -88,6 +88,23 @@ namespace WhiteLagoon.Web.Controllers
         [Authorize]
         public IActionResult BookingConfirmation(int bookingId)
         {
+            Booking bookingFromDb = _unitOfWork.Booking.Get(u => u.Id == bookingId,
+                includeProperties:"User,Villa");
+
+            if(bookingFromDb.Status == SD.StatusPending)
+            {
+                //this is a pending order, we need to confirm if payment was successful
+                var service = new SessionService();
+                Session session = service.Get(bookingFromDb.StripeSessionId);
+
+                if(session.PaymentStatus == "paid")
+                {
+                    _unitOfWork.Booking.UpdateStatus(bookingFromDb.Id, SD.StatusApproved);
+                    _unitOfWork.Booking.UpdateStripePaymentID(bookingFromDb.Id, session.Id, session.PaymentIntentId);
+                    _unitOfWork.Save();
+                }
+            }
+
             return View(bookingId);
         }
 
